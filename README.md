@@ -4,13 +4,16 @@ chrono-holidays
 An extension for [chrono](https://github.com/wanasit/chrono) to provide parsing for
 holidays.
 
+It knows things like `thanksgiving in 2017` and `christmas`!
+
 ## Usage
 For now, just grab the source and run `yarn build` to get the includable `lib` directory.
 This'll be on NPM soon, I promise.
 
 ## Why not merge into chrono?
-I don't people to have to install holidays if they don't care. Probably the JSON file will
-end up getting fairly large.
+I don't want people to have to install holidays if they don't care. I expect the JSON file
+will end up getting fairly large. This doesn't duplicate chrono though, just includes it
+and uses its excellent custom parser support.
 
 ## Contributing
 Commit `yarn.lock`, not `package-lock.json`. Add holidays. Fix bugs. As long as it passes
