@@ -1,72 +1,74 @@
 import chrono from 'chrono-node';
 import path from 'path';
+import file from 'file';
 import fs from 'fs';
 
-const holidays = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'holidays.json'), 'utf8'));
 const custom = new chrono.Chrono();
 
+const regexFromName = (name) => (name
+    .replace(/ /g, '(\\s+)')            // space to whitespace
+    .replace(/\(/g, '(?:')              // all groups non-capturing
+    + '(?:\\s+(?:in\\s+)?(\\d+))?'      // add date parsing
+);
 
-const addHoliday = (pattern, startFn) => {
+const determineYear = (ref, match) => {
+    if (match[1] === undefined)
+        return ref.getFullYear();
+
+    return parseInt(match[1])
+};
+
+const determineDate = (year, holiday) => {
+    if (holiday.type === 'abs')
+        return holiday.date;
+
+    if (holiday.nth > 0) {
+        const temp_date = new Date(Date.UTC(
+            year, holiday.month - 1, 1,
+            0,1,0,0 // 1 minute so i don't have to think about midnight
+        ));
+        return (holiday.day - temp_date.getUTCDay() + 7) % 7 + (holiday.nth - 1) * 7 + 1;
+    }
+
+    const temp_date = new Date(Date.UTC(
+        year, holiday.month, 0, // will get the last day of holiday.month - 1
+        0,1,0,0
+    ));
+    return temp_date.getUTCDate() - (temp_date.getUTCDay() - holiday.day + 7) % 7 + (holiday.nth + 1) * 7;
+};
+
+chrono.Chrono.prototype.addHoliday = function(holiday) {
     const parser = new chrono.Parser();
-    parser.pattern = () => new RegExp(pattern.replace(/ /g, '(?:\\s+)'), 'i');
+    parser.pattern = () => new RegExp(regexFromName(holiday.name), 'i');
     parser.extract = (text, ref, match, opt) => {
+        const year = determineYear(ref, match);
+        const date = determineDate(year, holiday);
+
         return new chrono.ParsedResult({
             ref: ref,
+            pattern: parser.pattern(),
             text: match[0],
             index: match.index,
-            start: startFn(ref, match),
+            start: {
+                year: year,
+                month: holiday.month,
+                day: date,
+            },
         });
     };
 
-    custom.parsers.push(parser);
+    this.parsers.push(parser);
 };
 
-const addNewRelativeHoliday = (holiday) => {
-    let regex = holiday.name.replace(/\(/g, '(?:')
-    regex = regex + '(?:\\s+(?:in\\s+)?(\\d+))?';  // add date parsing
-    addHoliday(regex, (ref, match) => {
-        let year = 0;
-        if (match[1] === undefined) {
-            year = ref.getFullYear();
-        } else {
-            year = parseInt(match[1])
-        }
-
-        let date = 0;
-        if (holiday.nth > 0) {
-            const temp_date = new Date(Date.UTC(
-                year, holiday.month - 1, 1,
-                0,1,0,0 // 1 minute so i don't have to think about midnight
-            ));
-            date = (holiday.day - temp_date.getUTCDay() + 7) % 7 + (holiday.nth - 1) * 7 + 1
-        } else {
-            const temp_date = new Date(Date.UTC(
-                year, holiday.month, 0, // will get the last day of holiday.month - 1
-                0,1,0,0
-            ));
-            date = temp_date.getUTCDate() - (temp_date.getUTCDay() - holiday.day + 7) % 7 + (holiday.nth + 1) * 7
-        }
-
-        return {
-            year: year,
-            month: holiday.month,
-            day: date,
-        };
+fs.readdir(path.resolve(__dirname, 'holidays'), (err, files) => {
+    files.forEach(holidaysFile => {
+        const filename = path.resolve(__dirname, 'holidays', holidaysFile);
+        const holidays = JSON.parse(fs.readFileSync(filename, 'utf8'));
+        holidays.forEach(holiday => {
+            custom.addHoliday(holiday);
+        });
     });
-};
-const addNewAbsoluteHoliday = (holiday) => {
-    const regex = holiday.name.replace(/\(/g, '(?:')
-    addHoliday(regex, () => ({
-        month: holiday.month,
-        day: holiday.date,
-    }));
-};
-
-holidays.forEach(holiday => {
-    if (holiday.type === 'rel')
-        addNewRelativeHoliday(holiday);
-    else
-        addNewAbsoluteHoliday(holiday);
 });
 
+module.exports = custom;
 export default custom;
