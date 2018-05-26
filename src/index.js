@@ -8,7 +8,7 @@ const custom = new chrono.Chrono();
 
 const addHoliday = (pattern, startFn) => {
     const parser = new chrono.Parser();
-    parser.pattern = () => new RegExp(pattern.replace(/ /g, '\\s+'), 'i');
+    parser.pattern = () => new RegExp(pattern.replace(/ /g, '(?:\\s+)'), 'i');
     parser.extract = (text, ref, match, opt) => {
         return new chrono.ParsedResult({
             ref: ref,
@@ -22,7 +22,8 @@ const addHoliday = (pattern, startFn) => {
 };
 
 const addNewRelativeHoliday = (holiday) => {
-    const regex = holiday.name + '(?:\\s+(?:in\\s+)?(\\d+))?';
+    let regex = holiday.name.replace(/\(/g, '(?:')
+    regex = regex + '(?:\\s+(?:in\\s+)?(\\d+))?';  // add date parsing
     addHoliday(regex, (ref, match) => {
         let year = 0;
         if (match[1] === undefined) {
@@ -30,23 +31,32 @@ const addNewRelativeHoliday = (holiday) => {
         } else {
             year = parseInt(match[1])
         }
-        const temp_date = new Date(Date.UTC(
-            year, holiday.month - 1, 1,
-            0,1,0,0
-        ));
-        console.log(temp_date);
-        console.log(temp_date.getUTCDay());
-        const date = (holiday.day - temp_date.getUTCDay() + 7) % 7 + (holiday.nth - 1) * 7
+
+        let date = 0;
+        if (holiday.nth > 0) {
+            const temp_date = new Date(Date.UTC(
+                year, holiday.month - 1, 1,
+                0,1,0,0 // 1 minute so i don't have to think about midnight
+            ));
+            date = (holiday.day - temp_date.getUTCDay() + 7) % 7 + (holiday.nth - 1) * 7 + 1
+        } else {
+            const temp_date = new Date(Date.UTC(
+                year, holiday.month, 0, // will get the last day of holiday.month - 1
+                0,1,0,0
+            ));
+            date = temp_date.getUTCDate() - (temp_date.getUTCDay() - holiday.day + 7) % 7 + (holiday.nth + 1) * 7
+        }
 
         return {
             year: year,
             month: holiday.month,
-            day: date + 1,
+            day: date,
         };
     });
 };
 const addNewAbsoluteHoliday = (holiday) => {
-    addHoliday(holiday.name, () => ({
+    const regex = holiday.name.replace(/\(/g, '(?:')
+    addHoliday(regex, () => ({
         month: holiday.month,
         day: holiday.date,
     }));

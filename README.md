@@ -19,6 +19,8 @@ and uses its excellent custom parser support.
 Commit `yarn.lock`, not `package-lock.json`. Add holidays. Fix bugs. As long as it passes
 tests, you're good to go and I'll almost certainly accept your MR.
 
+If your holiday has a complex regex, add a few tests for it.
+
 ### Holidays.json
 There are two types of holidays.
 
@@ -34,3 +36,4 @@ The name field is actually a regex. Slashes must be escaped twice, since it must
 expressed as a string to be stored in JSON. However, it will be made case-insensitive, and
 all literal spaces will be replaced with `/\s+/` to allow for any whitespace, so you
 shouldn't need many slashes if any.
+

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import fs from 'fs';
 
 let holidays = null;
-describe('Holidays', function() {
+describe('holidays.json', function() {
     before(function() {
         holidays = JSON.parse(fs.readFileSync('./lib/holidays.json', 'utf8'));
     });
@@ -49,8 +49,11 @@ describe('Holidays', function() {
                 index = holiday.date;
             }
 
-            expect(index).to.be.above(prev.index - 1,
-                `Error: holiday [${name}]'s index is before previous`);
+            if (holiday.month === prev.month) {
+                expect(index).to.be.above(prev.index - 1,
+                    `Error: holiday [${name}]'s index is before previous`);
+
+            }
 
             prev.month = holiday.month;
             prev.index = index;

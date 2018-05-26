@@ -28,22 +28,22 @@ describe('Chrono', function() {
             .to.be.parsedAs('25 Dec 2018 12:00:00 UTC');
     });
 
-    it('parses Thanksgiving 2017 from ref', function() {
+    it('parses 2017 from ref', function() {
         expect(chrono.parse('12:00 on Thanksgiving UTC', new Date(2017,1,1)))
             .to.be.parsedAs('23 Nov 2017 12:00:00 UTC');
     });
 
-    it('parses Thanksgiving 2018 from ref', function() {
+    it('parses 2018 from ref', function() {
         expect(chrono.parse('12:00 on Thanksgiving UTC', new Date(2018,1,1)))
             .to.be.parsedAs('22 Nov 2018 12:00:00 UTC');
     });
 
-    it('parses Thanksgiving 2017 explicit', function() {
+    it('parses explicit 2017 date', function() {
         expect(chrono.parse('12:00 on Thanksgiving 2017 UTC', new Date(2016,1,1)))
             .to.be.parsedAs('23 Nov 2017 12:00:00 UTC');
     });
 
-    it('parses Thanksgiving 2018 explicit', function() {
+    it('parses explicit 2018 date', function() {
         expect(chrono.parse('12:00 on Thanksgiving in 2018 UTC', new Date(2016,1,1)))
             .to.be.parsedAs('22 Nov 2018 12:00:00 UTC');
     });
@@ -51,5 +51,21 @@ describe('Chrono', function() {
     it('takes arbitrary whitespace for spaces', function() {
         expect(chrono.parse("12:00 on Mother's   \t        day UTC", new Date(2018, 1, 1)))
             .to.be.parsedAs('13 May 2018 12:00 UTC');
+    });
+
+    it('parses mlk day several ways', function() {
+        const mlk = (input) => {
+            expect(chrono.parse(`12:00 on ${input} UTC`, new Date(2019,1,1)))
+                .to.be.parsedAs('21 Jan 2019 12:00 UTC');
+        }
+        mlk('martin luther king day');
+        mlk('martin luther king, jr. day');
+        mlk('martin luther king, jr day');
+        mlk('mlk day');
+    });
+
+    it('parses memorial day', function() {
+        expect(chrono.parse(`12:00 on memorial day UTC`, new Date(2013,1,1)))
+            .to.be.parsedAs('27 May 2013 12:00 UTC')
     });
 });
