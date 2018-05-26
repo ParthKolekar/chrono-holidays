@@ -1,10 +1,11 @@
 {
   "name": "chrono-holidays",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Holidays addition to `chrono`",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src --out-dir lib --copy-files",
+    "build": "rm -rf lib && babel src --out-dir lib --copy-files && yarn minify-json",
+    "minify-json": "find lib -name '*.json' -exec sh -c '$(yarn bin)/json-minify \"'{}'\">t && mv t \"'{}'\"' \\;",
     "prepublish": "yarn build",
     "test": "yarn build && mocha --require babel-register test"
   },
@@ -21,6 +22,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
+    "json-minify": "^1.0.0",
     "mocha": "^5.2.0"
   }
 }
