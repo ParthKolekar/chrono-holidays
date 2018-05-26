@@ -8,7 +8,7 @@ const custom = new chrono.Chrono();
 
 const addHoliday = (pattern, startFn) => {
     const parser = new chrono.Parser();
-    parser.pattern = () => new RegExp(pattern, 'i');
+    parser.pattern = () => new RegExp(pattern.replace(/ /g, '\\s+'), 'i');
     parser.extract = (text, ref, match, opt) => {
         return new chrono.ParsedResult({
             ref: ref,
@@ -30,16 +30,18 @@ const addNewRelativeHoliday = (holiday) => {
         } else {
             year = parseInt(match[1])
         }
-        const temp_date = new Date();
-        temp_date.setFullYear(year);
-        temp_date.setMonth(holiday.month);
-        temp_date.setDate(0);
-        const date = (holiday.day - temp_date.getDay()) + (holiday.nth - 1) * 7
-        temp_date.setDate(date);
+        const temp_date = new Date(Date.UTC(
+            year, holiday.month - 1, 1,
+            0,1,0,0
+        ));
+        console.log(temp_date);
+        console.log(temp_date.getUTCDay());
+        const date = (holiday.day - temp_date.getUTCDay() + 7) % 7 + (holiday.nth - 1) * 7
 
         return {
+            year: year,
             month: holiday.month,
-            day: temp_date.getDate() + 1,
+            day: date + 1,
         };
     });
 };

@@ -39,13 +39,17 @@ describe('Chrono', function() {
     });
 
     it('parses Thanksgiving 2017 explicit', function() {
-        expect(chrono.parse('12:00 on Thanksgiving 2017 UTC', new Date(2017,1,1)))
+        expect(chrono.parse('12:00 on Thanksgiving 2017 UTC', new Date(2016,1,1)))
             .to.be.parsedAs('23 Nov 2017 12:00:00 UTC');
     });
 
     it('parses Thanksgiving 2018 explicit', function() {
-        expect(chrono.parse('12:00 on Thanksgiving in 2018 UTC', new Date(2018,1,1)))
+        expect(chrono.parse('12:00 on Thanksgiving in 2018 UTC', new Date(2016,1,1)))
             .to.be.parsedAs('22 Nov 2018 12:00:00 UTC');
     });
 
+    it('takes arbitrary whitespace for spaces', function() {
+        expect(chrono.parse("12:00 on Mother's   \t        day UTC", new Date(2018, 1, 1)))
+            .to.be.parsedAs('13 May 2018 12:00 UTC');
+    });
 });
