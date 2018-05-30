@@ -1,6 +1,6 @@
 {
   "name": "chrono-holidays",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Holidays addition to `chrono`",
   "main": "lib/index.js",
   "scripts": {
@@ -13,6 +13,9 @@
   "author": "Robert Perce <contact@rperce.net>",
   "license": "MIT",
   "private": false,
+  "files": [
+    "lib/"
+  ],
   "dependencies": {
     "chrono-node": "^1.3.5",
     "file": "^0.2.2"
