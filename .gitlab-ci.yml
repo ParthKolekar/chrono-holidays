@@ -1,5 +1,8 @@
 image: mhart/alpine-node:8
 
+before_script:
+  - npm install -g gulp-cli
+
 babel:
   stage: build
   tags: ['docker']
