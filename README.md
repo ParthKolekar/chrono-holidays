@@ -8,13 +8,18 @@ holidays.
 It knows things like `thanksgiving in 2017` and `christmas`!
 
 ## Usage
-For now, just grab the source and run `yarn build` to get the includable `lib` directory.
-This'll be on NPM soon, I promise.
+```bash
+$ yarn add chrono-holidays
+```
+(or use `npm`, I'm not picky).
 
-## Why not merge into chrono?
-I don't want people to have to install holidays if they don't care. I expect the JSON
-files will end up getting fairly large. This doesn't duplicate chrono though, just
-includes it and uses its excellent custom parser support.
+Then, from code (all examples here are es2015, but it works just as well in es5):
+```javascript
+import chrono from 'chrono-holidays';
+
+const xmas = chrono.parseDate('christmas');
+// xmas is a Date object for December 25 of the current year
+```
 
 ## So you want even more holidays?
 The object you get from importing `chrono-holidays` has an `addHoliday` method that
@@ -32,6 +37,11 @@ chrono.addHoliday({
 chrono.parseDate("robert's birthday", new Date(2018,1,1)).toDateString()
 // returns 'Mon Nov 05 2018'
 ```
+
+## Why not merge into chrono?
+I don't want people to have to install holidays if they don't care. I expect the JSON
+files will end up getting fairly large. This doesn't duplicate chrono though, just
+includes it and uses its excellent custom parser support.
 
 ## Contributing
 Commit `yarn.lock`, not `package-lock.json`. Add holidays. Fix bugs. As long as it passes
