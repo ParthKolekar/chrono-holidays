@@ -1,5 +1,7 @@
 chrono-holidays
 ===
+[![pipeline status](https://gitlab.com/rperce/chrono-holidays/badges/master/pipeline.svg)](https://gitlab.com/rperce/chrono-holidays/commits/master)
+![npm](https://img.shields.io/npm/dt/chrono-holidays.svg)
 
 An extension for [chrono](https://github.com/wanasit/chrono) to provide parsing for
 holidays.
