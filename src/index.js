@@ -13,7 +13,7 @@ const regexFromName = (name) => (name
 
 const determineYear = (ref, match) => {
     if (match[1] === undefined)
-        return ref.getFullYear();
+        return new Date(ref).getFullYear();
 
     return parseInt(match[1])
 };
