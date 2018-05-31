@@ -1,4 +1,4 @@
-image: mhart/alpine-node:10
+image: mhart/alpine-node:8
 
 babel:
   stage: build
