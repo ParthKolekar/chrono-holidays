@@ -7,7 +7,9 @@
     "build": "rm -rf lib && babel src --out-dir lib --copy-files && yarn minify-json",
     "minify-json": "find lib -name '*.json' -exec sh -c '$(yarn bin)/json-minify \"'{}'\">t && mv t \"'{}'\"' \\;",
     "prepublish": "yarn build",
-    "test": "yarn build && mocha --require babel-register test"
+    "test": "yarn test-format && yarn test-holidays",
+    "test-format": "mocha --require babel-register test/holidays_json.js",
+    "test-holidays": "mocha --require babel-register 'test/!(holidays_json).js'"
   },
   "repository": "https://gitlab.com/rperce/chrono-holidays",
   "author": "Robert Perce <contact@rperce.net>",
