@@ -1,16 +1,25 @@
 image: alpine:3.7
-before_script:
-  - apk add --no-cache nodejs nodejs-npm
-  - node --version
-  - npm --version
-  - npm install --global yarn
-  - yarn --version
-  - yarn install
+stages:
+    - prepare
+    - build
+    - test
+
+prepare:
+  stage: prepare
+  tags: ['docker']
+  script:
+    - apk add --no-cache nodejs nodejs-npm
+    - node --version
+    - npm --version
+    - npm install --global yarn
+    - yarn --version
 
 babel:
   stage: build
   tags: ['docker']
-  script: yarn build
+  script:
+    - yarn install
+    - yarn build
 
 formatting:
   stage: test
