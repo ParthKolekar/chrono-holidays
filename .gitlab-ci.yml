@@ -1,10 +1,4 @@
-image: alpine:3.7
-before_script:
-  - apk add --no-cache nodejs nodejs-npm
-  - node --version
-  - npm --version
-  - npm install --global yarn
-  - yarn --version
+image: mhart/alpine-node:10
 
 babel:
   stage: build
