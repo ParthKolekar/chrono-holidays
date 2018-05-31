@@ -65,7 +65,9 @@ fs.readdir(path.resolve(__dirname, 'holidays'), (err, files) => {
         const filename = path.resolve(__dirname, 'holidays', holidaysFile);
         const holidays = JSON.parse(fs.readFileSync(filename, 'utf8'));
         holidays.forEach(holiday => {
-            custom.addHoliday(holiday);
+            if (!('meta' in holiday)) {
+                custom.addHoliday(holiday);
+            }
         });
     });
 });
