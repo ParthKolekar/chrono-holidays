@@ -10,7 +10,7 @@ babel:
     paths:
       - node_modules/
       - lib/
-  expire_in: 1 week
+    expire_in: 1 week
 
 formatting:
   stage: test
