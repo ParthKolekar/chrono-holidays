@@ -9,16 +9,16 @@ before_script:
 
 babel:
   stage: build
-  tags: docker
+  tags: ['docker']
   script: yarn build
 
 formatting:
   stage: test
-  tags: docker
+  tags: ['docker']
   script: yarn test-format
 
 holidays:
   stage: test
-  tags: docker
+  tags: ['docker']
   script: yarn test-holidays
 
