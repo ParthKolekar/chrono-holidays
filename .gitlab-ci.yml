@@ -5,7 +5,7 @@ babel:
   tags: ['docker']
   script:
     - yarn install
-    - yarn build
+    - gulp build
   artifacts:
     paths:
       - node_modules/
@@ -15,10 +15,10 @@ babel:
 formatting:
   stage: test
   tags: ['docker']
-  script: yarn test-format
+  script: gulp test-format
 
 holidays:
   stage: test
   tags: ['docker']
-  script: yarn test-holidays
+  script: gulp test-holidays
 
