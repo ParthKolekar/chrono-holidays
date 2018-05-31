@@ -1,13 +1,14 @@
 import { expect } from 'chai';
 import path from 'path';
 import fs from 'fs';
+import minify from 'node-json-minify';
 
 let holidayFiles = [];
 describe('holiday json formats', function() {
     before(function() {
         holidayFiles = fs.readdirSync(path.resolve('.', 'lib', 'holidays')).map(file => {
             const fname = path.resolve('.', 'lib', 'holidays', file);
-            return JSON.parse(fs.readFileSync(fname, 'utf8'));
+            return JSON.parse(minify(fs.readFileSync(fname, 'utf8')));
         });
     });
 
@@ -15,9 +16,6 @@ describe('holiday json formats', function() {
         holidayFiles.forEach(holidays => {
             let foundAbs = false;
             holidays.forEach(holiday => {
-                if ('meta' in holiday) // pretend it doesn't exist
-                    return;
-
                 const name = holiday.name;
 
                 expect(holiday.type).to.be.oneOf(['rel', 'abs'],
@@ -40,9 +38,6 @@ describe('holiday json formats', function() {
             };
             let inRel = true;
             holidays.forEach(holiday => {
-                if ('meta' in holiday) // pretend it doesn't exist
-                    return;
-
                 if (inRel && holiday.type === 'abs') {
                     inRel = false;
                     prev.month = 0;

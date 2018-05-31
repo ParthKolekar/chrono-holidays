@@ -1,6 +1,5 @@
 import chrono from 'chrono-node';
 import path from 'path';
-import file from 'file';
 import fs from 'fs';
 
 const custom = new chrono.Chrono();
@@ -60,17 +59,12 @@ chrono.Chrono.prototype.addHoliday = function(holiday) {
     this.parsers.push(parser);
 };
 
-fs.readdir(path.resolve(__dirname, 'holidays'), (err, files) => {
-    files.forEach(holidaysFile => {
-        const filename = path.resolve(__dirname, 'holidays', holidaysFile);
-        const holidays = JSON.parse(fs.readFileSync(filename, 'utf8'));
-        holidays.forEach(holiday => {
-            if (!('meta' in holiday)) {
-                custom.addHoliday(holiday);
-            }
-        });
+fs.readdirSync(path.resolve(__dirname, 'holidays')).forEach(holidaysFile => {
+    const filename = path.resolve(__dirname, 'holidays', holidaysFile);
+    const holidays = JSON.parse(fs.readFileSync(filename, 'utf8'));
+    holidays.forEach(holiday => {
+        custom.addHoliday(holiday);
     });
 });
 
 module.exports = custom;
-export default custom;
