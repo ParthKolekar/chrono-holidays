@@ -1,7 +1,6 @@
 [
     // Source: all 'Secular' entries from https://en.wikipedia.org/wiki/List_of_multinational_festivals_and_holidays
     { "type": "rel", "month": 3,  "day": 4, "nth": 2,  "name": "world kidney day" },
-    { "type": "rel", "month": 5,  "day": 4, "nth": 1,  "name": "national day of reason" },
     // Holidays 'National day of reason' and 'Memorial day', though listed in the wikipedia page, are only observed in the US, so are not included here.
     { "type": "rel", "month": 9,  "day": 1, "nth": 1,  "name": "labou?r day" },
 
@@ -23,7 +22,7 @@
     // Indian Independence Day is observed only in India, so is not included here.
     // There's some other holidays on this page that are single-country; assume they're not included.
     { "type": "abs", "month": 9,  "date": 19, "name": "(international )?talk like a pirate day" },
-    { "type": "abs", "month": 9,  "date": 21, "name": "(international )?day of piece" },
+    { "type": "abs", "month": 9,  "date": 21, "name": "(international )?day of peace" },
     // the 'traditional' observance of columbus day is oct 12; this conflicts with the us-federal entry
     { "type": "abs", "month": 10, "date": 31, "name": "all hallow('?s|s') eve" },
     { "type": "abs", "month": 10, "date": 31, "name": "halloween" },
