@@ -10,13 +10,13 @@ gulp.task('clean', () => (
 ));
 
 gulp.task('js-dev', () => (
-    gulp.src('src/index.js')
+    gulp.src('src/*.js')
         .pipe(babel())
         .pipe(gulp.dest('lib'))
 ));
 
 gulp.task('js', () => (
-    gulp.src('src/index.js')
+    gulp.src('src/*.js')
         .pipe(babel())
         .pipe(uglify())
         .pipe(gulp.dest('lib'))
@@ -32,14 +32,20 @@ gulp.task('build-dev', gulp.series('clean', 'js-dev', 'json'));
 gulp.task('build', gulp.series('clean', 'js', 'json'));
 
 
-gulp.task('test-format', () => (
-    gulp.src('test/holidays_json.js')
+const test = (dir) => ['test/setup.js', 'test/' + dir + '/*.js'];
+gulp.task('test-json', () => (
+    gulp.src(test('json'))
         .pipe(mocha({ require: 'babel-register' }))
 ));
 
-gulp.task('test-holidays', () => (
-    gulp.src('test/!(holidays_json).js')
+gulp.task('test-unit', () => (
+    gulp.src(test('unit'))
         .pipe(mocha({ require: 'babel-register' }))
 ));
 
-gulp.task('test', gulp.series('test-format', 'test-holidays'));
+gulp.task('test-integration', () => (
+    gulp.src(test('integration'))
+        .pipe(mocha({ require: 'babel-register' }))
+));
+
+gulp.task('test', gulp.series('test-json', 'test-unit', 'test-integration'));

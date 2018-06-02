@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import path from 'path';
 import fs from 'fs';
 
-import chrono from '../lib/index';
+import chrono from '../..';
 
 const holidayFiles = fs.readdirSync(path.resolve('.', 'lib', 'holidays')).map(file => {
     const fname = path.resolve('.', 'lib', 'holidays', file);
