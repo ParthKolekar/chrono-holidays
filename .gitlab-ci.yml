@@ -1,3 +1,4 @@
+# vim: set ts=2 sw=2 :
 image: mhart/alpine-node:8
 
 before_script:
@@ -15,13 +16,18 @@ build:
       - lib/
     expire_in: 1 week
 
-test-formatting:
+test-json:
   stage: test
   tags: ['docker']
-  script: gulp test-format
+  script: gulp test-json
 
-test-holidays:
+test-unit:
   stage: test
   tags: ['docker']
-  script: gulp test-holidays
+  script: gulp test-unit
+
+test-integration:
+  stage: test
+  tags: ['docker']
+  script: gulp test-integration
 
